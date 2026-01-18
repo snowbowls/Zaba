@@ -2,6 +2,11 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="lavalink" />
+      <option name="name" value="lavalink" />
+      <option name="url" value="https://maven.lavalink.dev/releases" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="dv8tion" />
       <option name="name" value="m2-dv8tion" />
       <option name="url" value="https://m2.dv8tion.net/releases" />
@@ -15,6 +20,11 @@
       <option name="id" value="jcenter" />
       <option name="name" value="jcenter-bintray" />
       <option name="url" value="https://jcenter.bintray.com" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="lavalink" />
+      <option name="name" value="lavalink" />
+      <option name="url" value="https://maven.lavalink.dev/snapshots" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="arbjergDev-snapshots" />

@@ -34,8 +34,9 @@ public class Bot{
                 //.addEventListeners(new AntiJonPostingEvent())
                 .addEventListeners(new PeriodicEvent())
                 .addEventListeners(new UserStatEvent())
-                .addEventListeners(new ContribroEvent())
+                //.addEventListeners(new ContribroEvent())
                 .addEventListeners(new ButtonTest())
+                //.addEventListeners(new AIchat())
 
                 .build();
     }

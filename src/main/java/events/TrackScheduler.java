@@ -13,8 +13,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
-    private final BlockingQueue<AudioTrack> queue;
-
+    final BlockingQueue<AudioTrack> queue;
+    private boolean isRepeating = false;
+    private AudioTrack currentTrack = null;
     /**
      * @param player The audio player this scheduler uses
      */
@@ -49,8 +50,20 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
+        currentTrack = track;
+        if (isRepeating) {
+            queue.offer(track.makeClone());
+        }
+
         if (endReason.mayStartNext) {
             nextTrack();
         }
+    }
+    public void setRepeating(boolean repeating) {
+        isRepeating = repeating;
+    }
+
+    public boolean isRepeating() {
+        return isRepeating;
     }
 }

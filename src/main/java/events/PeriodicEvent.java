@@ -8,6 +8,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -41,7 +44,7 @@ public class PeriodicEvent extends ListenerAdapter {
         moodScheduler(event.getJDA());
         birthdayScheduler(event.getJDA());
         statusSet(event.getJDA());
-        leaveServer(event.getJDA());
+        //leaveServer(event.getJDA());
         //creditCheckScheduler(event.getJDA());
     }
     public void statusSet(JDA jda){
@@ -407,6 +410,45 @@ public class PeriodicEvent extends ListenerAdapter {
             else{
                 Objects.requireNonNull(jda.getTextChannelById(chatID)).sendMessage("Today is " + mention + "'s birthday!").queue();
             }
+        }
+    }
+
+
+    @Override
+    public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {
+        AudioChannelUnion channelLeft = event.getChannelLeft();
+        AudioChannelUnion channelJoined = event.getChannelJoined();
+
+        if (channelLeft == null || channelJoined != null) {
+            return;
+        }
+
+        // A user has disconnected from the voice channel
+
+        Guild guild = event.getGuild();
+        Member selfMember = guild.getSelfMember();
+
+        AudioChannelUnion botChannel = selfMember.getVoiceState().getChannel();
+
+        if (botChannel == null || !botChannel.equals(channelLeft)) {
+            // The bot is either not connected or connected to a different channel.
+            return;
+        }
+
+        List<Member> remainingMembers = channelLeft.getMembers();
+
+        long humansPresent = remainingMembers.stream()
+                .filter(member -> !member.getUser().isBot())
+                .count();
+
+        if (humansPresent == 0) {
+
+            // Disconnect
+            guild.getAudioManager().closeAudioConnection();
+
+            // Log
+            System.out.printf("Disconnected from Voice Channel '%s' in Guild '%s' because I was alone (zero human users).%n",
+                    channelLeft.getName(), guild.getName());
         }
     }
     public void leaveServer(JDA jda) {
