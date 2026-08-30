@@ -20,7 +20,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -261,15 +260,6 @@ public class PlayerControl extends ListenerAdapter {
     musicManager.player.stopTrack();
 
     event.getMessage().addReaction(Emoji.fromUnicode("squid:979113110029889546")).queue();
-  }
-
-  private static void connectToFirstVoiceChannel(AudioManager audioManager) {
-    if (!audioManager.isConnected()) {
-      for (VoiceChannel voiceChannel : audioManager.getGuild().getVoiceChannels()) {
-        audioManager.openAudioConnection(voiceChannel);
-        break;
-      }
-    }
   }
 
   private static void connectToSendersVoiceChannel(MessageReceivedEvent event) {

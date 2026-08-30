@@ -298,76 +298,6 @@ public class old_PlayerControl extends ListenerAdapter {
     // }
   }
 
-  private void loadAndPlayy(
-      GuildMusicManager mng,
-      final Channel channel,
-      String url,
-      final boolean addPlaylist,
-      MessageReceivedEvent event) {
-    final String trackUrl;
-
-    // Strip <>'s that prevent discord from embedding link resources
-    if (url.startsWith("<") && url.endsWith(">")) trackUrl = url.substring(1, url.length() - 1);
-    else trackUrl = url;
-
-    playerManager.loadItemOrdered(
-        mng,
-        trackUrl,
-        new AudioLoadResultHandler() {
-          @Override
-          public void trackLoaded(AudioTrack track) {
-            String msg = "Adding to queue: " + track.getInfo().title;
-            if (mng.player.getPlayingTrack() == null) msg += "\nand the bot has started playing;";
-
-            mng.scheduler.queue(track);
-            event.getChannel().sendMessage(msg).queue();
-          }
-
-          @Override
-          public void playlistLoaded(AudioPlaylist playlist) {
-            AudioTrack firstTrack = playlist.getSelectedTrack();
-            List<AudioTrack> tracks = playlist.getTracks();
-
-            if (firstTrack == null) {
-              firstTrack = playlist.getTracks().get(0);
-            }
-
-            if (addPlaylist) {
-              event
-                  .getChannel()
-                  .sendMessage(
-                      "Adding **"
-                          + playlist.getTracks().size()
-                          + "** tracks to queue from playlist: "
-                          + playlist.getName())
-                  .queue();
-              tracks.forEach(mng.scheduler::queue);
-            } else {
-              event
-                  .getChannel()
-                  .sendMessage(
-                      "Adding to queue "
-                          + firstTrack.getInfo().title
-                          + " (first track of playlist "
-                          + playlist.getName()
-                          + ")")
-                  .queue();
-              mng.scheduler.queue(firstTrack);
-            }
-          }
-
-          @Override
-          public void noMatches() {
-            event.getChannel().sendMessage("Nothing found by " + trackUrl).queue();
-          }
-
-          @Override
-          public void loadFailed(FriendlyException exception) {
-            event.getChannel().sendMessage("Could not play: " + exception.getMessage()).queue();
-          }
-        });
-  }
-
   private void loadAndPlay(
       GuildMusicManager musicManager,
       final Channel channel,
@@ -422,13 +352,6 @@ public class old_PlayerControl extends ListenerAdapter {
     // connectToFirstVoiceChannel(guild.getAudioManager());
 
     musicManager.scheduler.queue(track);
-  }
-
-  private void skipTrack(Channel channel, GuildMusicManager musicManager) {
-    // GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
-    musicManager.scheduler.nextTrack();
-
-    // channel.sendMessage("Skipped to next track.").queue();
   }
 
   private GuildMusicManager getMusicManager(Guild guild) {
