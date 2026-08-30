@@ -1,4 +1,3 @@
 package events;
 
-public class ResponseEvent {
-}
+public class ResponseEvent {}

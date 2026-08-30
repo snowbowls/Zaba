@@ -2,56 +2,48 @@ package events;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
+import java.nio.ByteBuffer;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 
-import java.nio.ByteBuffer;
-
 /**
- * This is a wrapper around AudioPlayer which makes it behave as an AudioSendHandler for JDA. As JDA calls canProvide
- * before every call to provide20MsAudio(), we pull the frame in canProvide() and use the frame we already pulled in
- * provide20MsAudio().
+ * This is a wrapper around AudioPlayer which makes it behave as an AudioSendHandler for JDA. As JDA
+ * calls canProvide before every call to provide20MsAudio(), we pull the frame in canProvide() and
+ * use the frame we already pulled in provide20MsAudio().
  */
-public class old_AudioPlayerSendHandler implements AudioSendHandler
-{
-    private final AudioPlayer audioPlayer;
-    private AudioFrame lastFrame;
+public class old_AudioPlayerSendHandler implements AudioSendHandler {
+  private final AudioPlayer audioPlayer;
+  private AudioFrame lastFrame;
 
-    /**
-     * @param audioPlayer Audio player to wrap.
-     */
-    public old_AudioPlayerSendHandler(AudioPlayer audioPlayer)
-    {
-        this.audioPlayer = audioPlayer;
+  /**
+   * @param audioPlayer Audio player to wrap.
+   */
+  public old_AudioPlayerSendHandler(AudioPlayer audioPlayer) {
+    this.audioPlayer = audioPlayer;
+  }
+
+  @Override
+  public boolean canProvide() {
+    if (lastFrame == null) {
+      lastFrame = audioPlayer.provide();
     }
 
-    @Override
-    public boolean canProvide()
-    {
-        if (lastFrame == null)
-        {
-            lastFrame = audioPlayer.provide();
-        }
+    return lastFrame != null;
+  }
 
-        return lastFrame != null;
+  @Override
+  public ByteBuffer provide20MsAudio() {
+    if (lastFrame == null) {
+      lastFrame = audioPlayer.provide();
     }
 
-    @Override
-    public ByteBuffer provide20MsAudio()
-    {
-        if (lastFrame == null)
-        {
-            lastFrame = audioPlayer.provide();
-        }
+    byte[] data = lastFrame != null ? lastFrame.getData() : null;
+    lastFrame = null;
 
-        byte[] data = lastFrame != null ? lastFrame.getData() : null;
-        lastFrame = null;
+    return ByteBuffer.wrap(data);
+  }
 
-        return ByteBuffer.wrap(data);
-    }
-
-    @Override
-    public boolean isOpus()
-    {
-        return true;
-    }
+  @Override
+  public boolean isOpus() {
+    return true;
+  }
 }
