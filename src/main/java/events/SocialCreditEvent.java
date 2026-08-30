@@ -62,6 +62,13 @@ public class SocialCreditEvent extends ListenerAdapter {
             .build();
 
     if (msg[0].equalsIgnoreCase("!show")) {
+      if (msg.length < 2) {
+        event
+            .getChannel()
+            .sendMessage("Usage: `!show mine`, `!show all`, `!show @user`, or `!show <username>`")
+            .queue();
+        return;
+      }
       // !show mine
       if (msg[1].equalsIgnoreCase("mine")) {
         System.out.println(

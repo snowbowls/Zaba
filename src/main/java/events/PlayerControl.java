@@ -19,6 +19,7 @@ import java.util.concurrent.BlockingQueue;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -89,6 +90,7 @@ public class PlayerControl extends ListenerAdapter {
 
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
+    if (!event.isFromType(ChannelType.TEXT)) return;
 
     String[] command = event.getMessage().getContentRaw().split(" ", 2);
     TextChannel connectedChannel = event.getChannel().asTextChannel();
