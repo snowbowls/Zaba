@@ -72,8 +72,11 @@
         <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>v2</artifactId>
-            <version>1.18.2</version>
+            <!--<version>1.18.2</version>-->
+            <version>f45bbb7aebfcbc1c553769e04af6cd43afa8b7c3-SNAPSHOT</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -99,6 +102,12 @@
             <url>https://maven.lavalink.dev/releases</url>
 
         </repository>
+
+        <repository>
+            <id>lavalink-snapshots</id>
+            <url>https://maven.lavalink.dev/snapshots</url>
+        </repository>
+
         <repository>
             <id>arbjergDev-snapshots</id>
             <name>Lavalink Repository</name>

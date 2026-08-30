@@ -8,6 +8,8 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
+import dev.lavalink.youtube.YoutubeSourceOptions;
+import dev.lavalink.youtube.clients.*;
 import dev.lavalink.youtube.http.YoutubeOauth2Handler;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -27,7 +29,6 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
 import static events.UserStatEvent.dotenv;
-
 
 public class PlayerControl extends ListenerAdapter
 { /*
@@ -485,6 +486,7 @@ public class PlayerControl extends ListenerAdapter
         AudioSourceManagers.registerLocalSource(playerManager);
     }*/
     private static final Logger log = LoggerFactory.getLogger(YoutubeOauth2Handler.class);
+    /* OLD
     public PlayerControl() {
         this.musicManagers = new HashMap<>();
 
@@ -492,9 +494,8 @@ public class PlayerControl extends ListenerAdapter
         //
         AudioSourceManagers.registerLocalSource(playerManager);
 
-        //YoutubeAudioSourceManager ytSourceManager = new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidTestsuiteWithThumbnail() });
         YoutubeAudioSourceManager source = new YoutubeAudioSourceManager();
-        String oauth_key = dotenv.get("OAUTH");
+
         source.useOauth2(oauth_key, true);
 
         //YoutubeAudioSourceManager ytSourceManager = new dev.lavalink.youtube.YoutubeAudioSourceManager();
@@ -502,6 +503,34 @@ public class PlayerControl extends ListenerAdapter
         //this.playerManager.registerSourceManager(youtube);
         AudioSourceManagers.registerRemoteSources(playerManager);
 
+    }
+    */
+    public PlayerControl() {
+        this.musicManagers = new HashMap<>();
+        this.playerManager = new DefaultAudioPlayerManager();
+
+        YoutubeSourceOptions options = new YoutubeSourceOptions()
+                .setRemoteCipher("https://cipher.kikkia.dev", null, "zaba-bot");
+
+        YoutubeAudioSourceManager source = new YoutubeAudioSourceManager(
+                options,
+                new MusicWithThumbnail(),
+                new Tv(),
+                new TvHtml5SimplyWithThumbnail(),
+                new AndroidVrWithThumbnail(),
+                new WebEmbeddedWithThumbnail()
+        );
+
+        String oauth_key = dotenv.get("OAUTH");
+        source.useOauth2(oauth_key, true);
+
+        playerManager.registerSourceManager(source);
+
+        AudioSourceManagers.registerRemoteSources(
+                playerManager,
+                com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class
+        );
+        AudioSourceManagers.registerLocalSource(playerManager);
     }
 
     private synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
@@ -641,6 +670,7 @@ public class PlayerControl extends ListenerAdapter
     }
     private void join(Guild guild, MessageReceivedEvent event) {
         try {
+            getGuildAudioPlayer(guild);
             connectToSendersVoiceChannel(event);
             event.getMessage().addReaction(Emoji.fromUnicode("polcow:1228764066047066252")).queue();
         }
