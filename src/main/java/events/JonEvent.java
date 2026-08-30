@@ -30,6 +30,7 @@ public class JonEvent extends ListenerAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         assert jsonObject != null;
 
         // Dragonball triggers

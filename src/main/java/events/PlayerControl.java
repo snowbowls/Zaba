@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
+import static events.UserStatEvent.dotenv;
+
 
 public class PlayerControl extends ListenerAdapter
 { /*
@@ -492,8 +494,9 @@ public class PlayerControl extends ListenerAdapter
 
         //YoutubeAudioSourceManager ytSourceManager = new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidTestsuiteWithThumbnail() });
         YoutubeAudioSourceManager source = new YoutubeAudioSourceManager();
-        //source.useOauth2(null, false);
-        source.useOauth2("1//05YYwDCzazDmOCgYIARAAGAUSNwF-L9IrhaKgtme9KvELlQz-_wbXD_C92maP8n9XDj81yoMPPaL0i6GF5UwN3PNCZJ044bLXxM8", true);
+        String oauth_key = dotenv.get("OAUTH");
+        source.useOauth2(oauth_key, true);
+
         //YoutubeAudioSourceManager ytSourceManager = new dev.lavalink.youtube.YoutubeAudioSourceManager();
         this.playerManager.registerSourceManager(source);
         //this.playerManager.registerSourceManager(youtube);
