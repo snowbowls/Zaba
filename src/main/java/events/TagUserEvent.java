@@ -24,7 +24,6 @@ public class TagUserEvent extends ListenerAdapter {
                 System.out.println(messages.get(0).getContentRaw());
                 messages.get(0).delete().queue();
               });
-      // event.getChannel().getHistory().retrievePast(1).complete().get(1).delete().complete();
     }
   }
 }

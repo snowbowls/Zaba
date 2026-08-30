@@ -36,7 +36,6 @@ public class JonEvent extends ListenerAdapter {
     triggers = (JSONArray) jsonObject.get("dragonball");
     for (Object key : triggers) {
       if (msg.contains(key.toString())) {
-        // event.getChannel().sendMessage("**SHUTUPSHUTUPSHUTUPSHUTUPSHUTUP**").queue();
 
         if (event.getAuthor().getId().equals("222163619125788682")) {
           event.getMessage().addReaction(Emoji.fromUnicode("15_neg:934919187787288597")).queue();
@@ -157,8 +156,5 @@ public class JonEvent extends ListenerAdapter {
           .deleteMessageById(event.getMessageId())
           .queueAfter(700, TimeUnit.MILLISECONDS);
     }
-
-    // Delete me
-    // event.getChannel().sendMessage("https://cdn.discordapp.com/attachments/858416918586851368/874480650332307516/SHUTTHEFUCKUP-1.mp4").queue();
   }
 }

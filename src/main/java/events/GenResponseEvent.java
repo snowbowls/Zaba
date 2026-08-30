@@ -96,9 +96,6 @@ class RelationshipManager {
   }
 
   public static String getContextForUser(String userId) {
-    // This should now print the correct instruction instead of null/empty
-    // System.out.println("Lookup ID: " + userId);
-    // System.out.println("Result: " + userContexts.getOrDefault(userId, "Default"));
 
     return userContexts.getOrDefault(userId, "");
   }
@@ -220,14 +217,10 @@ public class GenResponseEvent extends ListenerAdapter {
 
       command.add("!help player\n");
       use.add("Lists commands for the audio player\n");
-      // command.add("!help poll\n");
-      // use.add("Explains how the poll function works\n");
       command.add("!help socialcredit\n");
       use.add("Explains how social credit works\n");
       command.add("!help swearjar\n");
       use.add("Explains how the swear jar works\n");
-      // command.add("!help contra\n");
-      // use.add("Explains how the contribution tracker works\n");
 
       for (String s : command) commands.append(s);
       for (String s : use) uses.append(s);
@@ -252,26 +245,12 @@ public class GenResponseEvent extends ListenerAdapter {
 
       command.add("!play\n");
       use.add("Adds or plays songs from the current queue\n");
-      //                command.add("!leave\n");
-      //                use.add("Leaves the voice channel\n");
-      //                command.add("!pplay\n");
-      //                use.add("Adds a playlist to the queue\n");
-      //                command.add("!pause\n");
-      //                use.add("Pauses audio playback\n");
       command.add("!stop\n");
       use.add("Completely stops audio playback\n");
       command.add("!skip\n");
       use.add("Skips the current song\n");
-      //                command.add("!nowplaying\n");
-      //                use.add("Prints information about the current song\n");
-      //                command.add("!np\n");
-      //                use.add("Alias for nowplaying\n");
       command.add("!queue\n");
       use.add("Lists the songs in the queue\n");
-      //                command.add("!volume [val]\n");
-      //                use.add("Sets the volume of the MusicPlayer [10 - 100]\n");
-      //                command.add("!restart\n");
-      //                use.add("Restarts the current song\n");
       command.add("!loop\n");
       use.add("Toggles the player to repeat current song\n");
       command.add("!clear\n");
@@ -281,9 +260,6 @@ public class GenResponseEvent extends ListenerAdapter {
       command.add("!leave\n");
       use.add("Leaves the voice channel\n");
 
-      //                command.add("!reset\n");
-      //                use.add("Completely resets the player for a quick fix\n");
-
       for (String s : command) commands.append(s);
       for (String s : use) uses.append(s);
 
@@ -292,42 +268,6 @@ public class GenResponseEvent extends ListenerAdapter {
       MessageCreateData data = new MessageCreateBuilder().addEmbeds(eb.build()).build();
       event.getChannel().sendMessage(data).queue();
     }
-    /*
-    if(help[1].equalsIgnoreCase("poll")){
-        List<String> command = new ArrayList<>();
-        List<String> call = new ArrayList<>();
-        List<String> calldesc = new ArrayList<>();
-
-
-        StringBuilder commands = new StringBuilder();
-        StringBuilder calls = new StringBuilder();
-        StringBuilder calldescs = new StringBuilder();
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setThumbnail("https://images-ext-1.discordapp.net/external/HwnSW1Qv1B0_ZkomUohZ7P-TYmFsX775K0H4CdQRbAw/https/e0.pxfuel.com/wallpapers/940/704/desktop-wallpaper-glass-animals-zaba-artwork-by-micah-lidberg-glass-animals-pool-thumbnail.jpg");
-        eb.setTitle("Poll Function", null);
-        eb.setColor(new Color(114, 41, 54));
-
-        command.add("Send '!poll' followed by up to 10 options separated by commas\n\n");
-        command.add("Example: !poll TITLE HERE, Option 1, Option 2, Option 3, ...\n");
-        call.add("!poll headcount\n");
-        calldesc.add("Options for going, not going, and don't know yet");
-
-        for(String s : command)
-            commands.append(s);
-        for(String s: call)
-            calls.append(s);
-        for(String s: calldesc)
-            calldescs.append(s);
-
-        eb.addField("Command Explanation", commands.toString(), false);
-        eb.addField("Premade Polls", calls.toString(), true);
-        eb.addField("Description", calldescs.toString(), true);
-        MessageCreateData data = new MessageCreateBuilder()
-                .addEmbeds(eb.build())
-                .build();
-        event.getChannel().sendMessage(data).queue();
-    }
-    */
     if (help[1].equalsIgnoreCase("socialcredit")) {
       event
           .getChannel()
@@ -419,15 +359,6 @@ public class GenResponseEvent extends ListenerAdapter {
 
     String formattedContent;
 
-    /*
-    if (userId.equals("239473846447636481")) {
-        relationshipContext = "THIS IS GENTRY (YOUR BOYFRIEND). HE IS BEING DISTANT LOL.";
-    } else if (userId.equals("232295708974120960")) {
-        relationshipContext = "THIS IS COREY (YOUR OTHER BOYFRIEND). HE IS PROBABLY BUSY WITH HIS MUSIC INSTEAD OF YOU.";
-    } else {
-        relationshipContext = "THIS IS A STRANGER. TALK ABOUT HOW MUCH YOU MISS GENTRY AND COREY.";
-    }*/
-
     String speakerName = "";
     if (userId.equals("239473846447636481")) {
       speakerName = "Gentry";
@@ -457,15 +388,6 @@ public class GenResponseEvent extends ListenerAdapter {
     messagesArray.add(systemMsg);
 
     // 2. CHAT HISTORY
-    /*
-    synchronized (claireChatHistory) {
-        for (AIchat.ChatMessage msg : claireChatHistory) {
-            JsonObject m = new JsonObject();
-            m.addProperty("role", msg.role);
-            m.addProperty("content", msg.content);
-            messagesArray.add(m);
-        }
-    }*/
 
     JsonObject userMsg = new JsonObject();
     userMsg.addProperty("role", "user");
@@ -482,8 +404,6 @@ public class GenResponseEvent extends ListenerAdapter {
     JsonArray stopTokens = new JsonArray();
     stopTokens.add("<|start_header_id|>user<|end_header_id|>");
     stopTokens.add("<|eot_id|>");
-    // stopTokens.add("\n\nUser:");
-    // finalBody.add("stop", stopTokens);
 
     String jsonBody = gson.toJson(finalBody);
 
@@ -624,13 +544,6 @@ public class GenResponseEvent extends ListenerAdapter {
     String userId = event.getAuthor().getId();
     String relationNote = RelationshipManager.getContextForUser(userId);
 
-    // Prepare the Flavor Text (The Director's Note)
-    // String flavorText = "";
-    // if (flavor != null && !flavor.isEmpty()) {
-    // We wrap it in a specific system tag so Zaba knows it's a hint, not the user speaking.
-    //    flavorText = String.format(" [SYSTEM CONTEXT: %s]", flavor);
-    // }
-
     // Format the message with identity context
     String formattedContent;
     if (!relationNote.isEmpty()) {
@@ -676,20 +589,10 @@ public class GenResponseEvent extends ListenerAdapter {
     finalBody.add("messages", messagesArray);
     finalBody.addProperty("stream", false);
 
-    // finalBody.addProperty("temperature", 0.8);
-    // finalBody.addProperty("max_tokens", 4096);
-
-    // finalBody.addProperty("presence_penalty", 0.0);
-    // finalBody.addProperty("repeat_penalty", 1.15);
-
-    // finalBody.addProperty("min_p", 0.1);
-    // finalBody.addProperty("top_p", 0.95); // Slightly restrictive to keep him focused
-
     // 4. STOP TOKENS (Root level in OpenAI API)
     JsonArray stopTokens = new JsonArray();
     stopTokens.add("<|start_header_id|>user<|end_header_id|>");
     stopTokens.add("<|eot_id|>");
-    // stopTokens.add("\n\nUser:");
     finalBody.add("stop", stopTokens);
 
     String jsonBody = gson.toJson(finalBody);

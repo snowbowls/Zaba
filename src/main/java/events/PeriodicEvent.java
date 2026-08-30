@@ -44,8 +44,6 @@ public class PeriodicEvent extends ListenerAdapter {
     moodScheduler(event.getJDA());
     birthdayScheduler(event.getJDA());
     statusSet(event.getJDA());
-    // leaveServer(event.getJDA());
-    // creditCheckScheduler(event.getJDA());
   }
 
   public void statusSet(JDA jda) {
@@ -257,8 +255,6 @@ public class PeriodicEvent extends ListenerAdapter {
       Objects.requireNonNull(jda.getTextChannelById("816125354875944964"))
           .sendMessage(data)
           .queue();
-      // Objects.requireNonNull(jda.getTextChannelById("165246172892495872")).sendMessage("Behold,
-      // everyone! \nIt's **Friday**").addFile(new File("videos/friday/" + meme)).queue();
       System.out.println("------------------- Friday: " + meme);
     } else {
       System.out.println("------------------- No Friday for today");
@@ -307,9 +303,6 @@ public class PeriodicEvent extends ListenerAdapter {
     Guild guild = jda.getGuildById("816125354875944960");
     assert guild != null;
     if (Math.random() > .98 || Math.random() < .02) {
-      // Objects.requireNonNull(jda.getTextChannelById("816125354875944964")).sendMessage("Behold,
-      // everyone! \nToday's mood is: **" + key + "**").addFiles((Collection<? extends FileUpload>)
-      // new File("videos/moods/" + mood.get(key).toString())).queue();
       System.out.println("------------------- Mood: " + key);
     } else {
       System.out.println("------------------- No mood for today");

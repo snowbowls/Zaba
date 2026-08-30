@@ -41,13 +41,10 @@ public class AIchat extends ListenerAdapter {
   }
 
   // Inside your ListenerAdapter class
-  // @Override
   public void onMessageReceived(MessageReceivedEvent event) {
     if (event.getAuthor().isBot()) return;
 
     if (!isJarvisOnline()) {
-      // event.getChannel().sendMessage("⚠️ Jarvis is currently offline. Please check the server
-      // status.").queue();
       return;
     }
 
