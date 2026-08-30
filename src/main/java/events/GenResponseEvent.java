@@ -657,8 +657,7 @@ public class GenResponseEvent extends ListenerAdapter {
   // Naming convention can be done better but the gist is this class is used for handling the JSON
   // file
   public void onMessageReceived(MessageReceivedEvent event) {
-
-    if (event.getAuthor().isBot()) return;
+    if (MessageGuards.shouldIgnore(event)) return;
 
     String msg = event.getMessage().getContentRaw().toLowerCase();
 
@@ -668,8 +667,7 @@ public class GenResponseEvent extends ListenerAdapter {
       return;
     }
 
-    String[] help = msg.split("\\s");
-    if (help[0].equalsIgnoreCase(("!help"))) {
+    if (Command.parse(event).is("!help")) {
       callHelp(event);
       return;
     }

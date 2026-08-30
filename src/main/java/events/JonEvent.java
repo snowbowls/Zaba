@@ -14,6 +14,7 @@ public class JonEvent extends ListenerAdapter {
   // JonEvents are various actions with the intent of annoying someone. Nothing about this class is
   // organized well, it usually serves as a half-measure attempt at handling silly responses
   public void onMessageReceived(MessageReceivedEvent event) {
+    if (MessageGuards.shouldIgnore(event)) return;
 
     String msg = event.getMessage().getContentRaw().toLowerCase();
 

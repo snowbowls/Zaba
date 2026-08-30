@@ -19,7 +19,6 @@ import java.util.concurrent.BlockingQueue;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -90,27 +89,27 @@ public class PlayerControl extends ListenerAdapter {
 
   @Override
   public void onMessageReceived(MessageReceivedEvent event) {
-    if (!event.isFromType(ChannelType.TEXT)) return;
+    if (MessageGuards.shouldIgnore(event)) return;
 
-    String[] command = event.getMessage().getContentRaw().split(" ", 2);
+    Command cmd = Command.parse(event);
     TextChannel connectedChannel = event.getChannel().asTextChannel();
 
-    if ("!join".equals(command[0])) {
+    if (cmd.is("!join")) {
       join(connectedChannel.getGuild(), event);
-    } else if ("!leave".equals(command[0])) {
+    } else if (cmd.is("!leave")) {
       leave(connectedChannel.getGuild(), event);
-    } else if ("!play".equals(command[0]) && command.length == 2) {
-      loadAndPlay(connectedChannel, command[1], event);
-    } else if ("!stop".equals(command[0])) {
+    } else if (cmd.is("!play") && !cmd.rest().isEmpty()) {
+      loadAndPlay(connectedChannel, cmd.rest(), event);
+    } else if (cmd.is("!stop")) {
       stopTrack(connectedChannel, event);
-    } else if ("!skip".equals(command[0])) {
+    } else if (cmd.is("!skip")) {
       skipTrack(connectedChannel, event);
-    } else if ("!loop".equals(command[0])) {
+    } else if (cmd.is("!loop")) {
       repeatTrack(connectedChannel, event);
-    } else if ("!clear".equals(command[0]) || "!reset".equals(command[0])) {
+    } else if (cmd.is("!clear") || cmd.is("!reset")) {
       resetQueue(connectedChannel, event);
     }
-    if ("!queue".equals(command[0]) || "!list".equals(command[0])) {
+    if (cmd.is("!queue") || cmd.is("!list")) {
       printQueue(connectedChannel, event);
     }
 
